@@ -1,0 +1,48 @@
+---
+  - hosts: new_server
+    remote_user: root
+
+    tasks:
+    - name: echo http_proxy
+      shell: "echo $http_proxy"
+      environment:
+        http_proxy: http://10.102.5.16:3128
+
+    - name: echo http_proxy again
+      shell: "echo $http_proxy"
+
+    - name: echo https_proxy
+      shell: "echo $https_proxy"
+      environment:
+        https_proxy: https://10.102.5.16:3128
+
+    - name: echo https_proxy again
+      shell: "echo $https_proxy"
+
+    - name: install epel
+      yum:
+        name: epel-release
+        state: latest
+
+    - name: install nrpe
+      yum:
+        name: nrpe
+        state: latest
+
+    - name: install nagios plugin
+      yum:
+        name: nagios-plugins-all
+        state: latest
+
+    - name: deploy nrpe.cfg
+      copy:
+        src: /home/infra/nrpe/nrpe.cfg
+        dest: /etc/nagios/nrpe.cfg
+      register: deploy_nrpe
+
+    - name: start/restart and enable nrpe
+      systemd:
+        name: nrpe
+        state: restarted
+        enabled: yes
+      when: deploy_nrpe.changed
