@@ -1,5 +1,8 @@
 ---
   - hosts: new_server
+    environment:
+      http_proxy: http://ip-server:port
+      https_proxy: https://ip-server:port
     remote_user: root
 
     tasks:
@@ -12,19 +15,6 @@
         name: firewalld
         state: stopped
         enabled: no
-
-    - name: echo http_proxy
-      shell: "echo $http_proxy"
-      environment:
-        http_proxy: http://ip-proxy:port-proxy
-
-    - name: echo http_proxy again
-      shell: "echo $http_proxy"
-
-    - name: echo https_proxy
-      shell: "echo $https_proxy"
-      environment:
-        https_proxy: https://ip-proxy:port-proxy
 
     - name: update system
       yum:
@@ -71,4 +61,4 @@
           - openldap-clients
           - yum-cron
           - yum-utils
-      state: latest
+        state: latest
