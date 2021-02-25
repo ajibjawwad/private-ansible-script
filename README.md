@@ -7,4 +7,4 @@ simple ansible script just for daily activity to install common service and depl
 - nrpe-deploy.yml is used to install nrpe agent and deploy nrpe configuration to new server.
 
 
-in this script use proxy configuration you can remove it if no proxy in your network.
+in this script use proxy configuration you can remove proxy server if there is no proxy in your network.
